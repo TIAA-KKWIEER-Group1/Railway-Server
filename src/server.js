@@ -1,8 +1,7 @@
 import { config } from 'dotenv';
+import app from './app.js';
 
 config();
-
-import app from './app.js';
 
 const PORT = process.env['PORT'] || 8080;
 
