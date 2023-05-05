@@ -21,6 +21,6 @@ export const findMobileNoAndUpdate = async (mobileNo, otp) => {
   }
 };
 
-export const getOTP = (mobileNo) => {
-  return otpModel.find(mobileNo);
+export const verifyOTPAndDelete = (mobileNo, otp) => {
+  return otpModel.findOneAndDelete({ mobileNo, otp });
 };

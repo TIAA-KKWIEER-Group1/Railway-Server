@@ -4,6 +4,7 @@ import * as userController from '../controller/user.controller.js';
 const router = Router();
 
 router.post('/login', userController.login);
-router.post('/register', userController.getOTPAtRegister);
+router.post('/register/sendotp', userController.getOTPAtRegister);
+router.post('/register/verify', userController.verifyOTPAtRegister);
 
 export default router;
