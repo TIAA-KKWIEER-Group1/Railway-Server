@@ -1,4 +1,5 @@
 import express, { urlencoded } from 'express';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import routes from './routes/route.js';
 
@@ -6,6 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Default route
 app.get('/', cors(), async (req, res) => {

@@ -4,6 +4,10 @@ export const createUser = (user) => {
   return userModel.create(user);
 };
 
-export const findUser = (mobileNo) => {
+export const findUserWithMobileNO = (mobileNo) => {
   return userModel.findOne({ mobileNo });
+};
+
+export const findUserWithEmail = (email) => {
+  return userModel.findOne({ email });
 };
