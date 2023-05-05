@@ -3,7 +3,7 @@ import * as userServices from '../services/user.services.js';
 import * as otpServices from '../services/otp.services.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/token/generateToken.js';
-import { cookieOptions } from '../config/cookie.js';
+import { sendOTP } from '../utils/otp/sendOTP.js';
 
 export const login = async (req, res) => {
   const { mobileNo, password } = req.body;
@@ -66,14 +66,19 @@ export const getOTPAtRegister = async (req, res) => {
     // if user already has OTP, then update it
     const isOTPUpdated = await otpServices.findMobileNoAndUpdate(mobileNo, OTP);
 
-    if (isOTPUpdated) {
-      return res.status(200).json({ message: 'otp is updated ' });
-    } else {
+    if (!isOTPUpdated) {
       await otpServices.addOTP(mobileNo, OTP);
-      return res.status(200).json({ message: 'OTP send' });
     }
 
-    // TODO send sms and update the structure
+    // send the OTP
+    const countryCode = '+91';
+    const newMobileNo = countryCode + '' + mobileNo;
+
+    sendOTP(newMobileNo, OTP);
+
+    return res
+      .status(200)
+      .json({ message: `OTP sent successfully to ${mobileNo} ` });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Something went wrong.....' });
