@@ -14,16 +14,16 @@ const cookieOptions = {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { mobileNo, password } = req.body;
 
-  if (!email || !password) {
+  if (!mobileNo || !password) {
     return res
       .status(400)
       .json({ message: 'Please enter all required fields ' });
   }
 
   try {
-    const isUser = await userServices.findUserWithEmail(email);
+    const isUser = await userServices.findUserWithMobileNO(mobileNo);
 
     if (!isUser) {
       return res
@@ -45,7 +45,8 @@ export const login = async (req, res) => {
     return res.status(200).json({
       message: 'Login Successful',
       user: {
-        email: isUser.email,
+        firstName: isUser.firstName,
+        lastName: isUser.lastName,
       },
     });
   } catch (error) {
@@ -57,7 +58,7 @@ export const login = async (req, res) => {
 export const getOTPAtRegister = async (req, res) => {
   const { mobileNo } = req.body;
   if (!mobileNo) {
-    return res.status(400).json({ message: 'Please provide a mobile No' });
+    return res.status(400).json({ message: 'Please provide a Mobile No' });
   }
 
   try {
@@ -65,7 +66,7 @@ export const getOTPAtRegister = async (req, res) => {
 
     // if user exists
     if (isUser) {
-      return res.status(404).json({ message: 'Mobile no already registered' });
+      return res.status(404).json({ message: 'Mobile NO already registered' });
     }
 
     const OTP = generateOTP(6);
@@ -90,7 +91,7 @@ export const getOTPAtRegister = async (req, res) => {
 export const verifyOTPAtRegister = async (req, res) => {
   const { firstName, lastName, mobileNo, password, email, otp } = req.body;
 
-  if (!firstName || !lastName || !mobileNo || !password || !email || !otp) {
+  if (!firstName || !lastName || !mobileNo || !password || !otp) {
     return res
       .status(400)
       .json({ message: 'Please enter all required fields ' });
