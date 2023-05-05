@@ -15,6 +15,7 @@ app.get('/', cors(), async (req, res) => {
 });
 
 app.use('/user', routes.userRoutes);
+app.use('/admin', routes.adminRoutes);
 
 // Not found route
 app.get('*', cors(), (req, res) => {

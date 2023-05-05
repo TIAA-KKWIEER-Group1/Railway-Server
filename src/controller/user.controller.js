@@ -3,15 +3,7 @@ import * as userServices from '../services/user.services.js';
 import * as otpServices from '../services/otp.services.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/token/generateToken.js';
-
-const EXPIRY_DAYS = 180;
-
-const cookieOptions = {
-  sameSite: process.env['NODE_ENV'] === 'production' ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
-  secure: process.env['NODE_ENV'] === 'production', // must be true if sameSite='none',
-  httpOnly: true,
-  maxAge: EXPIRY_DAYS * (24 * 60 * 60 * 1000),
-};
+import { cookieOptions } from '../config/cookie.js';
 
 export const login = async (req, res) => {
   const { mobileNo, password } = req.body;
