@@ -1,7 +1,7 @@
 import * as adminServices from '../services/admin.services.js';
 import { cookieOptions } from '../config/cookie.js';
 import bcrypt from 'bcryptjs';
-import { generateToken } from '../utils/token/generateToken.js';
+import { generateTokenForAdmin } from '../utils/token/generateToken.js';
 
 export const login = async (req, res) => {
   const { userName, password } = req.body;
@@ -29,7 +29,8 @@ export const login = async (req, res) => {
         .json({ message: 'Incorrect Username or Password' });
     }
 
-    const token = generateToken(isAdmin._id, isAdmin.userName, true);
+    const isUserAdmin = true;
+    const token = generateTokenForAdmin(isAdmin._id, isAdmin.userName);
     res.cookie('token', token, cookieOptions);
 
     return res.status(200).json({

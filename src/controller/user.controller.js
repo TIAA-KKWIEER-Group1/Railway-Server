@@ -1,9 +1,12 @@
 import { generateOTP } from '../utils/otp/generateOTP.js';
 import * as userServices from '../services/user.services.js';
+import * as adminServices from '../services/admin.services.js';
 import * as otpServices from '../services/otp.services.js';
 import bcrypt from 'bcryptjs';
-import { generateToken } from '../utils/token/generateToken.js';
+import { generateTokenForUser } from '../utils/token/generateToken.js';
 import { sendOTP } from '../utils/otp/sendOTP.js';
+import { cookieOptions } from '../config/cookie.js';
+import { decodeToken } from '../utils/token/decodeToken.js';
 
 export const login = async (req, res) => {
   const { mobileNo, password } = req.body;
@@ -31,7 +34,8 @@ export const login = async (req, res) => {
         .json({ message: 'Incorrect Username or Password' });
     }
 
-    const token = generateToken(isUser._id, isUser.mobileNo);
+    const isUserAdmin = false;
+    const token = generateTokenForUser(isUser._id, isUser.mobileNo);
     res.cookie('token', token, cookieOptions);
 
     return res.status(200).json({
@@ -116,4 +120,49 @@ export const verifyOTPAtRegister = async (req, res) => {
     console.log(error);
     return res.status(500).json({ message: 'Something went wrong.....' });
   }
+};
+
+export const getLoginStatus = async (req, res) => {
+  const token = req.cookies['token'];
+  if (!token) {
+    return res.status(200).json({ isLoggedIn: false });
+  }
+
+  try {
+    const authTokenData = decodeToken(token);
+    if (authTokenData.isAdmin) {
+      const admin = await adminServices.find(authTokenData.userName);
+
+      if (!admin) {
+        return res.status(200).json({ isLoggedIn: false });
+      }
+      return res
+        .status(200)
+        .json({ isLoggedIn: true, isAdmin: true, admin: admin.userName });
+    } else {
+      const user = await userServices.findUserWithMobileNO(
+        authTokenData.mobileNo,
+      );
+      if (!user) {
+        return res.status(200).json({ isLoggedIn: false });
+      }
+
+      const loggedInUser = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+      };
+
+      return res
+        .status(200)
+        .json({ isLoggedIn: true, isAdmin: false, user: loggedInUser });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Something went wrong.....' });
+  }
+};
+
+export const logout = async (req, res) => {
+  res.clearCookie('token', cookieOptions);
+  return res.status(200).json({ message: 'User Logout successful' });
 };
