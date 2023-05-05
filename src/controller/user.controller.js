@@ -1,6 +1,7 @@
 import { generateOTP } from '../utils/otp/generateOTP.js';
 import * as userServices from '../services/user.services.js';
 import * as otpServices from '../services/otp.services.js';
+import bcrypt from 'bcryptjs';
 
 export const login = async (req, res) => {
   return res.status(200).json({ message: 'login works' });
@@ -22,9 +23,9 @@ export const getOTPAtRegister = async (req, res) => {
 
     const OTP = generateOTP(6);
 
+    // if user already has OTP, then update it
     const isOTPUpdated = await otpServices.findMobileNoAndUpdate(mobileNo, OTP);
 
-    // if user already has OTP, (then we have updated it)
     if (isOTPUpdated) {
       return res.status(200).json({ message: 'otp is updated ' });
     } else {
@@ -44,18 +45,30 @@ export const verifyOTPAtRegister = async (req, res) => {
 
   if (!firstName || !lastName || !mobileNo || !password || !email || !otp) {
     return res
-      .status(401)
+      .status(400)
       .json({ message: 'Please enter all required fields ' });
   }
 
   try {
     const isVerified = await otpServices.verifyOTPAndDelete(mobileNo, otp);
-    console.log(isVerified);
 
     if (!isVerified) {
       return res.status(401).json({ message: 'Invalid OTP' });
     } else {
-      return res.status(200).json({ message: 'Valid OTP' });
+      const hashPassword = await bcrypt.hash(password, 12);
+      const user = {
+        firstName,
+        lastName,
+        mobileNo,
+        password: hashPassword,
+        email,
+      };
+
+      await userServices.createUser(user);
+      return res.status(200).json({ message: 'Account created successfully' });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Something went wrong.....' });
+  }
 };
