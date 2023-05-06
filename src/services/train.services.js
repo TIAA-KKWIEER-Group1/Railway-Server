@@ -7,3 +7,28 @@ export const searchTrains = (source, destination, departureDate) => {
 export const getAllTrainSchedule = () => {
   return trainScheduleModel.find();
 };
+
+export const getInbetweenStations = (id) => {
+  return trainScheduleModel.findById(id);
+};
+
+export const getAllStations = async () => {
+  const data = await trainScheduleModel.aggregate([
+    { $group: { _id: { source: '$source', destination: '$destination' } } },
+    {
+      $project: {
+        _id: 0,
+        source: '$_id.source',
+        destination: '$_id.destination',
+      },
+    },
+  ]);
+  const stations = new Set();
+
+  data.forEach((item) => {
+    stations.add(item.source);
+    stations.add(item.destination);
+  });
+
+  return Array.from(stations);
+};
