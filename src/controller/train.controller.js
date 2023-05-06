@@ -8,16 +8,7 @@ export const searchTrain = async (req, res) => {
     return res.status(400).json({ message: 'please enter all the fields' });
   }
 
-  // date format day-month-year;
-  // const [day, month, year] = date.split('-');
-  // console.log(day, month, year);
-  // const sampleDate = new Date(year, month - 1, day);
-  // sampleDate.setHours(0, 0, 0, 0);
-  // console.log(sampleDate);
-
-  const d1 = moment.utc(date, 'DD-MM-YYYY');
-  const searchDate = d1.toDate();
-
+  const searchDate = date.toString();
   try {
     const data = await trainServices.searchTrains(
       source,
