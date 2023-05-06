@@ -42,10 +42,13 @@ export const getInBetweenStations = async (req, res) => {
   }
 
   try {
-    const stations = await trainServices.getInbetweenStations(id);
+    const trainData = await trainServices.getInbetweenStations(id);
 
-    // TODO: change according to the model
-    return res.status(200).json({ message: 'OK', data: stations });
+    if (!trainData) {
+      return res.status(404).json({ message: 'No such Train route found' });
+    }
+
+    return res.status(200).json({ message: 'OK', data: trainData });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Something went wrong.....' });

@@ -55,8 +55,9 @@ export const bookTicket = async (req, res) => {
 
   try {
     const trainDetails = await trainServices.getTrainDetail(trainId);
-    console.log(trainDetails);
-
+    if (!trainDetails) {
+      return res.status(404).json({ message: 'No such Train found' });
+    }
     if (
       acCount > trainDetails.availableACCoach ||
       sleeperCount > trainDetails.availableSleeperCoach ||
