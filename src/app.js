@@ -16,7 +16,7 @@ app.get('/', cors(), async (req, res) => {
 
 app.use('/user', routes.userRoutes);
 app.use('/admin', routes.adminRoutes);
-
+app.use('/train', routes.trainRoutes);
 // Not found route
 app.get('*', cors(), (req, res) => {
   return res.status(404).json({ message: 'API URL is not valid' });
