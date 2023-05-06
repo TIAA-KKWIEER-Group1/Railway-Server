@@ -25,6 +25,7 @@ app.get('/', async (req, res) => {
 app.use('/user', routes.userRoutes);
 app.use('/admin', routes.adminRoutes);
 app.use('/train', routes.trainRoutes);
+app.use('/ticket', routes.reservationRoutes);
 
 // Not found route
 app.get('*', (req, res) => {

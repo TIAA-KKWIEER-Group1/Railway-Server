@@ -1,11 +1,19 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const reservationSchema = mongoose.Schema({
-    firstName: {type: String, required: true},
-    middleName: {type: String, required: true},
-    lastName: {type: String, required: true},
+  userId: { type: String, required: true },
+  trainId: { type: String, required: true },
+  bookingDate: { type: Date, value: Date.now },
+  passengerDetails: [
+    {
+      firstName: String,
+      middleName: String,
+      lastName: String,
+      age: Number,
+      gender: String,
+      coach: String,
+    },
+  ],
+});
 
-    age: {type: Number, required: true},
-    
-    gender: {type: String, required: true}
-})
+export default mongoose.model('Reservation', reservationSchema);

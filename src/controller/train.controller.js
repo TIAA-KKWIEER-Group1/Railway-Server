@@ -1,5 +1,6 @@
 import * as trainServices from '../services/train.services.js';
 import mongoose from 'mongoose';
+import trainScheduleModel from '../models/trainSchedule.model.js';
 
 export const searchTrain = async (req, res) => {
   const { source, destination, date } = req.query;
@@ -55,6 +56,16 @@ export const getAllStations = async (req, res) => {
   try {
     const stations = await trainServices.getAllStations();
     return res.status(200).json({ message: 'OK', data: stations });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Something went wrong.....' });
+  }
+};
+
+export const addTrain = async (req, res) => {
+  try {
+    await trainScheduleModel.create(req.body);
+    return res.status(200).json({ message: 'OK' });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Something went wrong.....' });

@@ -12,6 +12,10 @@ export const getInbetweenStations = (id) => {
   return trainScheduleModel.findById(id);
 };
 
+export const getTrainDetail = (id) => {
+  return trainScheduleModel.findById(id);
+};
+
 export const getAllStations = async () => {
   const data = await trainScheduleModel.aggregate([
     { $group: { _id: { source: '$source', destination: '$destination' } } },
@@ -31,4 +35,17 @@ export const getAllStations = async () => {
   });
 
   return Array.from(stations);
+};
+
+export const updateTrainAvailableStatus = (
+  availableACCoach,
+  availableSleeperCoach,
+  availableGeneralCoach,
+  trainId,
+) => {
+  return trainScheduleModel.findByIdAndUpdate(trainId, {
+    availableACCoach,
+    availableSleeperCoach,
+    availableGeneralCoach,
+  });
 };

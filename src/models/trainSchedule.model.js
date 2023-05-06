@@ -5,6 +5,7 @@ const trainScheduleSchema = mongoose.Schema({
   name: { type: String, required: true },
   source: { type: String, required: true },
   destination: { type: String, required: true },
+
   departureDate: { type: String, required: true },
   departureTime: { type: String, required: true },
 
@@ -13,18 +14,23 @@ const trainScheduleSchema = mongoose.Schema({
 
   noOfACCoach: { type: Number, required: true },
   capacityACCoach: { type: Number, required: true },
+  availableACCoach: { type: Number, required: true },
 
   noOfSleeperCoach: { type: Number, required: true },
   capacitySleeperCoach: { type: Number, required: true },
+  availableSleeperCoach: { type: Number, required: true },
 
   noOfGeneralCoach: { type: Number, required: true },
   capacityGeneralCoach: { type: Number, required: true },
+  availableGeneralCoach: { type: Number, required: true },
 
   stations: [
     {
       name: { type: String, required: true },
-      arrivalDate: { type: Date, required: true },
-      departureDate: { type: Date, required: true },
+      arrivalDate: { type: String, required: true },
+      arrivalTime: { type: String, required: true },
+      departureDate: { type: String, required: true },
+      departureTime: { type: String, required: true },
       haltTime: { type: Number, required: true },
     },
   ],
