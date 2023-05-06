@@ -14,12 +14,6 @@ const trainScheduleSchema = mongoose.Schema({
   destinationArrivalDate: { type: String, required: true },
   destinationArrivalTime: { type: String, required: true },
 
-  // departureDate: { type: String, required: true },
-  // departureTime: { type: String, required: true },
-
-  // destinationDate: { type: String, required: true },
-  // destinationTime: { type: String, required: true },
-
   noOfACCoach: { type: Number, required: true },
   capacityACCoach: { type: Number, required: true },
   availableACCoach: { type: Number, required: true },
