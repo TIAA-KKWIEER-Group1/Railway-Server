@@ -6,11 +6,21 @@ const trainScheduleSchema = mongoose.Schema({
   source: { type: String, required: true },
   destination: { type: String, required: true },
 
-  departureDate: { type: String, required: true },
-  departureTime: { type: String, required: true },
+  sourceArrivalDate: { type: String, required: true },
+  sourceArrivalTime: { type: String, required: true },
+  sourceDepartureDate: { type: String, required: true },
+  sourceDepartureTime: { type: String, required: true },
 
-  destinationDate: { type: String, required: true },
-  destinationTime: { type: String, required: true },
+  destinationArrivalDate: { type: String, required: true },
+  destinationArrivalTime: { type: String, required: true },
+  destinationDepartureDate: { type: String, required: true },
+  destinationDepartureTime: { type: String, required: true },
+
+  // departureDate: { type: String, required: true },
+  // departureTime: { type: String, required: true },
+
+  // destinationDate: { type: String, required: true },
+  // destinationTime: { type: String, required: true },
 
   noOfACCoach: { type: Number, required: true },
   capacityACCoach: { type: Number, required: true },

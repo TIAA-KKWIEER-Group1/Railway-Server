@@ -1,7 +1,7 @@
 import trainScheduleModel from '../models/trainSchedule.model.js';
 
-export const searchTrains = (source, destination, departureDate) => {
-  return trainScheduleModel.find({ source, destination, departureDate });
+export const searchTrains = (source, destination, sourceArrivalDate) => {
+  return trainScheduleModel.find({ source, destination, sourceArrivalDate });
 };
 
 export const getAllTrainSchedule = () => {
