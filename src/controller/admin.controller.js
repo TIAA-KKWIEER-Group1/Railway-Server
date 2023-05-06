@@ -2,7 +2,6 @@ import * as adminServices from '../services/admin.services.js';
 import { cookieOptions } from '../config/cookie.js';
 import bcrypt from 'bcryptjs';
 import { generateTokenForAdmin } from '../utils/token/generateToken.js';
-
 export const login = async (req, res) => {
   const { userName, password } = req.body;
 
@@ -41,4 +40,8 @@ export const login = async (req, res) => {
     console.log(error);
     return res.status(500).json({ message: 'Something went wrong.....' });
   }
+};
+
+export const test = (req, res) => {
+  res.send(`Hello`);
 };

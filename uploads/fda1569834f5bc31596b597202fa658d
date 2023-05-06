@@ -1,0 +1,10 @@
+Train No,Train Name ,Source,Destination,Date,Station Name,Arrival Time,Departure Time,Halt,Total Seat,Number_of_AC_coach,Capacity_of_one_AC,Number_of_sleeper_coach,Capacity_of_one_sleeper,Number_of_General_coach,Capacity_of_one_general
+12842,Coromandel Exp,Chennai,Kolkata,5/5/2023,"MAS,OGL,BZA,RJY,VSKP,KUR,CTC,BHC,KGP,SHM","06:30,10:53,13:20,15:48,19:50,01:40,02:50,05:43,08:25,10:40","07:00,10:55,13:30,15:50,20:10,01:50,02:55,05:45,08:30,0","30,2,10,2,20,10,5,2,5,0",908,2,54,5,80,4,
+22222,CSMT Rajdhani,Nashik Road,Mumbai,5/6/2023,"NK,KYN,CSMT","08:00,10:13,11:15","08:15,10:20,0","15,7,0",700,5,54,1,60,5,
+22178,Mahanagari Exp,Nashik Road,Mumbai,6/6/2023,"NK,KYN,TNA,DR","07:00,10:22,10:48,11:12","7:20,10:25,10:50","20,3,2,0",1602,1,54,12,72,3,
+12115,Siddheshwar Exp,Kalyan,Pune,5/8/2023,"KYN,PUNE","23:00,02:15","23:15,0","15,0",1440,3,54,8,80,4,
+12221,Howrah Duronto,Pune,Kolkata,5/9/2023,"DDCC,MMR,BSL,NGP,TATA,HWH","15:00,16:13,20:17,22:40,04:10,16:10,20:15","15:15,16:15,20:20,22:45,04:15,16:20,0","15,2,3,5,5,10,0",1600,2,54,7,60,6,
+22117,Pune Ami Ac Exp,Pune,Jalgoan,5/10/2023,"PUNE,DDCC,ANG,KPG,MMR,JL,       ","23:05,00:35,02:30,03:40,05:20",,"2,3,2,5",1500,3,54,5,70,,
+1117,Csmt Dnr Spl ,Kalyan,Bhusawal,5/11/2023,"KYN,IGP,NK,BSL","12:07,14:15,14:47,03:00","12:10,14:20,14:50,18:05","3,3,5,3",600,4,54,3,60,,
+82902,Tejas Exp,Ahemdabad,MumbaI,5/12/2023,"ND,BRC,BH,ST","0,07:09,07:54,08:44,09:25,10:37,12:12,13:05	","6:40 ,07:11 ,07:59, 08:46 ,09:30 ,10:39, 12:15                                           ","2,5,2,5,2,3                                ",700,5,1,7,77,,
+22429,Dli Ptk Exp,Ludhiyana,Amritsar,5/13/2023,"LDH,JUC,BEAS,ASR","12:55,13:58,14:35,15:20                      ","13:05,14:03 ,14:37,15:45                      ","10,5,2,25",1503,4,1,7,78,,
