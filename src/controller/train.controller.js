@@ -87,12 +87,20 @@ export const addTrain = async (req, res) => {
     return res.status(500).json({ message: 'Something went wrong.....' });
   }
 };
-export const csvData = (req, res) => {
-  const results = [];
-  const file = fs.createReadStream(req.file.path);
-  readTrainScheduleCSV(file);
 
+export const csvData = async (req, res) => {
+  try {
+    const file = fs.createReadStream(req.file.path);
+    const trainSchedules = await readTrainScheduleCSV(file);
 
-    // console.log(result);
-    
+    console.log(trainSchedules);
+
+    // Insert in database
+    await trainScheduleModel.insertMany(trainSchedules);
+
+    return res.status(200).json({ message: 'Uploaded Excel' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Something went wrong.....' });
+  }
 };

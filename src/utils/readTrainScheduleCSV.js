@@ -1,109 +1,68 @@
-import TrainSchedule from '../models/trainSchedule.model.js';
+import excelToJson from 'convert-excel-to-json';
+import fs from 'fs';
 
-export const readTrainScheduleCSV = (file) => {
-  let content = [];
-
-  file.on('data', (chunk) => {
-    content += chunk;
+export const readTrainScheduleCSV = (csvFile) => {
+  const excelRawData = excelToJson({
+    source: fs.readFileSync(csvFile.path), // fs.readFileSync return a Buffer
+    header: { rows: 1 },
+    columnToKey: { '*': '{{columnHeader}}' },
   });
 
-  file.on('end', () => {
-    const rows = content.trim().split('\n');
-    const headers = rows.shift().split(',');
-    const jsonData = [];
+  const trainScheduleData = [];
 
-    const result = [];
+  for (let i = 0; i < excelRawData['Sheet1'].length; i++) {
+    let trainSchedule = excelRawData['Sheet1'][i];
 
-    rows.forEach((row, index) => {
-      const values = row.split(',');
-      let stationName = [];
-      let arrivalDate = [];
-      let arrivalTime = [];
-      let departureDate = [];
-      let departureTime = [];
-      let haltTime = [];
-      values.forEach((val, ind) => {
-        console.log(val);
-        if (ind == 7) {
-          stationName = val.split('/');
-          console.log(stationName);
-        } else if (ind == 4) {
-          arrivalDate = val.split('-');
-          console.log(arrivalDate);
-        } else if (ind == 8) {
-          arrivalTime = val.split('/');
-          console.log(arrivalTime);
-        } else if (ind == 5) {
-          departureDate = val.split('-');
-          console.log(departureDate);
-        } else if (ind == 9) {
-          departureTime = val.split('/');
-          console.log(departureTime);
-        } else if (ind == 10) {
-          haltTime = val.split('/');
-          console.log(haltTime);
-        }
+    let stations = [];
+
+    let stationArrivalDates = trainSchedule['arrivalDate'].split('-');
+    let stationDepartureDates = trainSchedule['departureDate'].split('-');
+    let stationNames = trainSchedule['stationName'].split('/');
+    let stationArrivalTimes = trainSchedule['arrivalTime'].split('/');
+    let stationDepartureTimes = trainSchedule['departureTime'].split('/');
+    let stationHaltTimes = trainSchedule['haltTime'].split('/');
+    let n = stationNames.length;
+
+    for (let i = 0; i < n; i++) {
+      stations.push({
+        name: stationNames[i],
+        arrivalDate: stationArrivalDates[i],
+        arrivalTime: stationArrivalTimes[i],
+        departureDate: stationDepartureDates[i],
+        departureTime: stationDepartureTimes[i],
+        haltTime: stationHaltTimes[i],
       });
+    }
 
-      const stationsHalts = [];
-      for (let i = 0; i < stationName.length; i++) {
-        stationsHalts.push({
-          name: stationName[i],
-          arrivalDate: arrivalDate[i],
-          arrivalTime: arrivalTime[i],
-          departureDate: departureDate[i],
-          departureTime: departureTime[i],
-          haltTime: haltTime[i],
-        });
-      }
-      console.log('Hii');
-      console.log(stationsHalts);
-      const jsonRow = {};
-      jsonRow['stations'] = stationsHalts;
+    trainScheduleData.push({
+      no: trainSchedule['trainNo'],
+      name: trainSchedule['trainName'],
+      source: trainSchedule['source'],
+      destination: trainSchedule['destination'],
 
-      headers.forEach((header, index) => {
-        console.log(`$${header}$`);
+      noOfACCoach: trainSchedule['noOfACCoach'],
+      capacityACCoach: trainSchedule['capacityACCoach'],
+      availableACCoach: trainSchedule['availableACCoach'],
 
-        jsonRow[header] = values[index];
-      });
+      noOfSleeperCoach: trainSchedule['noOfSleeperCoach'],
+      capacitySleeperCoach: trainSchedule['capacitySleeperCoach'],
+      availableSleeperCoach: trainSchedule['availableSleeperCoach'],
 
-      jsonData.push(jsonRow);
-      // console.log(jsonData);
+      noOfGeneralCoach: trainSchedule['noOfGeneralCoach'],
+      capacityGeneralCoach: trainSchedule['capacityGeneralCoach'],
+      availableGeneralCoach: trainSchedule['availableGeneralCoach'],
 
-      for (let i = 0; i < jsonData.length; i++) {
-        console.log('Hello');
-        console.log(jsonData[i].stations[0].arrivalTime);
-        result.push({
-          no: jsonData[i].trainNo,
-          name: jsonData[i].trainName,
-          source: jsonData[i].source,
-          destination: jsonData[i].destination,
-          sourceArrivalDate: jsonData[i].stations[0].arrivalDate,
-          sourceArrivalTime: jsonData[i].stations[0].arrivalTime,
-          sourceDepartureDate: jsonData[i].stations[0].departureDate,
-          sourceDepartureTime: jsonData[i].stations[0].departureTime,
-          destinationArrivalDate: jsonData[i].stations[0].arrivalDate,
-          destinationDepartureTime: jsonData[i].stations[0].arrivalTime,
-          noOfACCoach: jsonData[i].noOfACCoach,
-          capacityACCoach: jsonData[i].capacityACCoach,
-          availableACCoach: jsonData[i].availableACCoach,
-          noOfSleeperCoach: jsonData[i].noOfSleeperCoach,
-          capacitySleeperCoach: jsonData[i].capacitySleeperCoach,
-          availableSleeperCoach: jsonData[i].availableSleeperCoach,
-          noOfGeneralCoach: jsonData[i].noOfGeneralCoach,
-          capacityGeneralCoach: jsonData[i].capacityGeneralCoach,
-          availableGeneralCoach: jsonData[i].availableGeneralCoach,
-          stations: stationsHalts,
-        });
-      }
+      sourceArrivalDate: stationArrivalDates[0],
+      sourceArrivalTime: stationArrivalTimes[0],
+      sourceDepartureDate: stationDepartureDates[0],
+      sourceDepartureTime: stationDepartureTimes[0],
+
+      destinationArrivalDate: stationArrivalDates[n - 1],
+      destinationArrivalTime: stationArrivalTimes[n - 1],
+
+      stations,
     });
-    console.log(result.length);
-    TrainSchedule.insertMany(result)
-      .then(function () {
-        console.log('Successfully saved defult items to DB');
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  });
+  }
+
+  return trainScheduleData;
 };
