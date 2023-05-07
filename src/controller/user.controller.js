@@ -183,8 +183,9 @@ export const getProfile = async (req, res) => {
       return res.status(404).json('NO such user found');
     }
 
+    profile.password = undefined;
     const reservation = await userServices.getReservationDetails(userId);
-    
+
     return res
       .status(200)
       .json({ message: 'OK', data: { profile, reservation } });
