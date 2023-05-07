@@ -179,12 +179,12 @@ export const getProfile = async (req, res) => {
 
   try {
     const profile = await userServices.findUserWithId(userId);
-    if (!data) {
+    if (!profile) {
       return res.status(404).json('NO such user found');
     }
 
     const reservation = await userServices.getReservationDetails(userId);
-
+    
     return res
       .status(200)
       .json({ message: 'OK', data: { profile, reservation } });
