@@ -178,14 +178,16 @@ export const getProfile = async (req, res) => {
   console.log(userId);
 
   try {
-    const data = await userServices.findUserWithId(userId);
+    const profile = await userServices.findUserWithId(userId);
     if (!data) {
       return res.status(404).json('NO such user found');
     }
 
-    const reservationDetails = await userServices.getReservationDetails(userId);
+    const reservation = await userServices.getReservationDetails(userId);
 
-    return res.status(200).json({});
+    return res
+      .status(200)
+      .json({ message: 'OK', data: { profile, reservation } });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Something went wrong.....' });
