@@ -1,4 +1,4 @@
-import decodeToken from '../utils/token/decodeToken.js';
+import { decodeToken } from '../utils/token/decodeToken.js';
 
 export const isAdminAuth = (req, res, next) => {
   const token = req.cookies['token'];

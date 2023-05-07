@@ -10,6 +10,6 @@ router.post('/register/verify', userController.verifyOTPAtRegister);
 router.post('/logout', userController.logout);
 router.get('/status', userController.getLoginStatus);
 router.get('/getCSV', userController.getCSV);
-router.get('/profile', isUserAuth, use);
+router.get('/profile', isUserAuth, userController.getProfile);
 
 export default router;
