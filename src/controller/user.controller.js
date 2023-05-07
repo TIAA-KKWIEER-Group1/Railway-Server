@@ -150,6 +150,7 @@ export const getLoginStatus = async (req, res) => {
       const loggedInUser = {
         firstName: user.firstName,
         lastName: user.lastName,
+        mobileNo: user.mobileNo,
       };
 
       return res
@@ -170,4 +171,23 @@ export const getCSV = async (req, res) => {
   const data = await TrainSchedule.find();
   console.log(data);
   res.send(data);
+};
+
+export const getProfile = async (req, res) => {
+  const userId = req.body.userId;
+  console.log(userId);
+
+  try {
+    const data = await userServices.findUserWithId(userId);
+    if (!data) {
+      return res.status(404).json('NO such user found');
+    }
+
+    const reservationDetails = await userServices.getReservationDetails(userId);
+
+    return res.status(200).json({});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Something went wrong.....' });
+  }
 };
