@@ -8,5 +8,5 @@ router.post('/register/sendotp', userController.getOTPAtRegister);
 router.post('/register/verify', userController.verifyOTPAtRegister);
 router.post('/logout', userController.logout);
 router.get('/status', userController.getLoginStatus);
-
+router.get('/getCSV', userController.getCSV);
 export default router;

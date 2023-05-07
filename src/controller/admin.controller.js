@@ -42,3 +42,17 @@ export const login = async (req, res) => {
     return res.status(500).json({ message: 'Something went wrong.....' });
   }
 };
+
+// export const update = (req, res) => {
+//   const {trainNo , name , updateval } = req.body ;
+//   const No = TrainSchedule.findOne({
+//     no: trainNo
+//   })
+//   const updatevalue = TrainSchedule.fineOne({}) 
+//   if(!No){
+//     res.send("Enter valid train No ");
+//   }
+//   else {
+//     TrainSchedule.update({updateval:})
+//   }
+// }

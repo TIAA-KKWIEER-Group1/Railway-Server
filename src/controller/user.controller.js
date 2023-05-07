@@ -7,7 +7,7 @@ import { generateTokenForUser } from '../utils/token/generateToken.js';
 import { sendOTP } from '../utils/otp/sendOTP.js';
 import { cookieOptions } from '../config/cookie.js';
 import { decodeToken } from '../utils/token/decodeToken.js';
-
+import TrainSchedule from '../models/trainSchedule.model.js';
 export const login = async (req, res) => {
   const { mobileNo, password } = req.body;
 
@@ -165,4 +165,9 @@ export const getLoginStatus = async (req, res) => {
 export const logout = async (req, res) => {
   res.clearCookie('token', cookieOptions);
   return res.status(200).json({ message: 'User Logout successful' });
+};
+export const getCSV = async (req, res) => {
+  const data = await TrainSchedule.find();
+  console.log(data);
+  res.send(data);
 };
