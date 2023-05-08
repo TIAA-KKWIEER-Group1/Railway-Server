@@ -24,13 +24,30 @@ export const searchTrain = async (req, res) => {
 
   const searchDate = date.toString();
   try {
-    const data = await trainServices.searchTrains(
-      source,
-      destination,
-      searchDate,
-    );
+    const data = await trainServices.getAllTrainSchedule();
 
-    return res.status(200).json({ message: 'OK', data });
+    const result = [];
+    for (const i in data) {
+      const stations = [];
+
+      stations.push(data[i].source);
+      for (const j in data[i].stations) {
+        stations.push(data[i].stations[j].name);
+      }
+      stations.push(data[i].destination);
+
+      for (let x = 0; x < stations.length; x++) {
+        if (stations[x] === source) {
+          // source found;
+          for (let y = x + 1; y < stations.length; y++) {
+            if (stations[y] === destination) {
+              result.push(data[i].name);
+            }
+          }
+        }
+      }
+    }
+    return res.status(200).json({ message: 'OK', data: result });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Something went wrong.....' });
