@@ -9,11 +9,6 @@ const require = createRequire(import.meta.url);
 const multer = require('multer');
 
 const upload = multer({ dest: 'uploads/' });
-router.post(
-  '/csvData',
-  isAdminAuth,
-  upload.single('file'),
-  trainController.csvData,
-);
+router.post('/csvData', upload.single('file'), trainController.csvData);
 router.post('/login', adminController.login);
 export default router;
