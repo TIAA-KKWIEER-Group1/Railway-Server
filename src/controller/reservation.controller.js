@@ -22,6 +22,9 @@ export const bookTicket = async (req, res) => {
   let acCount = 0,
     sleeperCount = 0,
     generalCount = 0;
+
+  const details = [];
+
   for (const i in passengerDetails) {
     if (!hasAllRequiredFields(passengerDetails[i])) {
       return res.status(400).json({ message: 'Passenger details missing' });
@@ -75,7 +78,40 @@ export const bookTicket = async (req, res) => {
 
     await reservationServices.addReservation(data);
 
-    return res.status(200).json({ message: 'OK' });
+    const ticketDetails = [];
+
+    for (const i in passengerDetails) {
+      if (passengerDetails[i].coach == 'ac') {
+        ticketDetails.push({
+          seatNo: trainDetails.availableACCoach--,
+          coach: 'ac',
+          name:
+            passengerDetails[i].firstName + ' ' + passengerDetails[i].lastName,
+        });
+      }
+
+      if (passengerDetails[i].coach == 'sleeper') {
+        ticketDetails.push({
+          seatNo: trainDetails.availableSleeperCoach--,
+          coach: 'sleeper',
+          name:
+            passengerDetails[i].firstName + ' ' + passengerDetails[i].lastName,
+        });
+      }
+
+      if (passengerDetails[i].coach == 'general') {
+        ticketDetails.push({
+          seatNo: trainDetails.availableGeneralCoach--,
+          coach: 'general',
+          name:
+            passengerDetails[i].firstName + ' ' + passengerDetails[i].lastName,
+        });
+      }
+    }
+
+    const PRN = trainDetails._id;
+
+    return res.status(200).json({ message: 'OK', PRN, ticket: ticketDetails });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Something went wrong.....' });
