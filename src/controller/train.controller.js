@@ -22,13 +22,13 @@ export const searchTrain = async (req, res) => {
     return res.status(400).json({ message: 'please enter all the fields' });
   }
 
-  const searchDate = date.toString();
+  const searchDate = date;
   try {
     const data = await trainServices.getAllTrainSchedule();
 
     const result = [];
     for (const i in data) {
-      console.log(data[i].arrivalDate);
+      if (data[i].sourceArrivalDate !== searchDate) continue;
 
       const stations = [];
       stations.push(data[i].source);
