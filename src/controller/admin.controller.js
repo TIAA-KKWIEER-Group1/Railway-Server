@@ -84,6 +84,7 @@ export const updateTrainTime = async (req, res) => {
       );
 
       const difference = newTime - oldTime;
+      console.log(difference, 'hi');
 
       trainDetail.sourceArrivalDate = updatedArrivalDate;
       trainDetail.sourceArrivalTime = updatedArrivalTime;
@@ -92,12 +93,19 @@ export const updateTrainTime = async (req, res) => {
         trainDetail.sourceDepartureDate,
         trainDetail.sourceDepartureTime,
       );
+
+      console.log(difference);
+
       const stationUpdatedDepartureDateTime = new Date(
-        stationDepartureDateTime + difference,
+        stationDepartureDateTime.getTime() + difference,
       );
       const [d, t] = getStringFromDate(stationUpdatedDepartureDateTime);
 
-      console.log(d, t);
+      console.log(updatedArrivalDate, updatedArrivalTime);
+      console.log(
+        getStringFromDate(stationDepartureDateTime),
+        getStringFromDate(stationUpdatedDepartureDateTime),
+      );
 
       trainDetail.sourceDepartureDate = d;
       trainDetail.sourceDepartureTime = t;
@@ -106,6 +114,8 @@ export const updateTrainTime = async (req, res) => {
     for (let i = 0; i < trainDetail.stations.length; i++) {
       if (stationName === trainDetail.stations[i].name) {
         // this is the station tp update;
+
+        console.log();
 
         const oldTime = getDateTimeFromDate(
           trainDetail.stations[i].arrivalDate,
@@ -127,7 +137,7 @@ export const updateTrainTime = async (req, res) => {
           );
 
           const stationUpdatedArrivalDateTime = new Date(
-            stationArrivalDateTime + difference,
+            stationArrivalDateTime.getTime() + difference,
           );
           const [d, t] = getStringFromDate(stationUpdatedArrivalDateTime);
 
@@ -144,7 +154,7 @@ export const updateTrainTime = async (req, res) => {
           );
 
           const stationUpdatedDepartureDateTime = new Date(
-            stationDepartureDateTime + difference,
+            stationDepartureDateTime.getTime() + difference,
           );
           const [d_d, d_t] = getStringFromDate(stationUpdatedDepartureDateTime);
 
