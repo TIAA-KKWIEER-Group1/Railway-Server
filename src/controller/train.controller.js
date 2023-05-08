@@ -28,8 +28,9 @@ export const searchTrain = async (req, res) => {
 
     const result = [];
     for (const i in data) {
-      const stations = [];
+      console.log(data[i].arrivalDate);
 
+      const stations = [];
       stations.push(data[i].source);
       for (const j in data[i].stations) {
         stations.push(data[i].stations[j].name);
@@ -41,7 +42,7 @@ export const searchTrain = async (req, res) => {
           // source found;
           for (let y = x + 1; y < stations.length; y++) {
             if (stations[y] === destination) {
-              result.push(data[i].name);
+              result.push(data[i]);
             }
           }
         }
