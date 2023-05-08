@@ -17,21 +17,17 @@ export const getTrainDetail = (id) => {
 };
 
 export const getAllStations = async () => {
-  const data = await trainScheduleModel.aggregate([
-    { $group: { _id: { source: '$source', destination: '$destination' } } },
-    {
-      $project: {
-        _id: 0,
-        source: '$_id.source',
-        destination: '$_id.destination',
-      },
-    },
-  ]);
+  const data = await trainScheduleModel.find();
   const stations = new Set();
 
   data.forEach((item) => {
     stations.add(item.source);
     stations.add(item.destination);
+
+    // also add in between stations
+    item.stations.map((station) => {
+      stations.add(station.name);
+    });
   });
 
   return Array.from(stations);
