@@ -128,6 +128,9 @@ export const getTrainStatus = async (req, res) => {
   const trainId = req.params['id'];
   try {
     const trainDetail = await trainServices.getTrainDetail(trainId);
+    if (!trainDetail) {
+      return res.status(404).json({ message: 'No Such train found' });
+    }
     const currentDate = new Date();
 
     const arrivalDate = getDateTimeFromDate(
