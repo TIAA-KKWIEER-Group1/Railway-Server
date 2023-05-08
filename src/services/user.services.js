@@ -14,5 +14,5 @@ export const findUserWithId = (id) => {
 };
 
 export const getReservationDetails = (id) => {
-  return reservationModel.find({ userId: id });
+  return reservationModel.find({ userId: id }).populate('trainId', 'no name');
 };

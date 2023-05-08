@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const reservationSchema = mongoose.Schema({
-  userId: { type: String, required: true },
-  trainId: { type: String, required: true },
+  userId: { type: String, required: true, ref: 'User' },
+  trainId: { type: String, required: true, ref: 'TrainSchedule' },
   bookingDate: { type: Date, value: Date.now },
   passengerDetails: [
     {
