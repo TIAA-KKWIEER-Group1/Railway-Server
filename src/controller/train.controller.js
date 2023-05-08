@@ -6,6 +6,7 @@ const require = createRequire(import.meta.url);
 import multer from 'multer';
 import trainScheduleModel from '../models/trainSchedule.model.js';
 import { readTrainScheduleCSV } from '../utils/readTrainScheduleCSV.js';
+import { getDateTimeFromDate } from '../utils/getDateTimeFromDate.js';
 // const TrainSchedule = require('../models/trainSchedule.model.js');
 const path = require('path');
 const csvtojson = require('csvtojson');
@@ -117,6 +118,82 @@ export const csvData = async (req, res) => {
     await trainScheduleModel.insertMany(trainSchedules);
 
     return res.status(200).json({ message: 'Uploaded Excel' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Something went wrong.....' });
+  }
+};
+
+export const getTrainStatus = async (req, res) => {
+  const trainId = req.params['id'];
+  try {
+    const trainDetail = await trainServices.getTrainDetail(trainId);
+    const currentDate = new Date();
+
+    const arrivalDate = getDateTimeFromDate(
+      trainDetail.sourceArrivalDate,
+      trainDetail.sourceArrivalTime,
+    );
+    const destinationDate = getDateTimeFromDate(
+      trainDetail.destinationArrivalDate,
+      trainDetail.destinationArrivalTime,
+    );
+
+    if (arrivalDate.getTime() > currentDate.getTime()) {
+      // when train didn't started
+      return res.status(200).json({
+        message: 'OK',
+        isStarted: false,
+        isEnded: false,
+        stations: trainDetail.stations,
+      });
+    }
+
+    if (destinationDate.getTime() < currentDate.getTime()) {
+      // when train has completed the journey
+      return res.status(200).json({
+        message: 'OK',
+        isStarted: true,
+        isEnded: true,
+        stations: trainDetail.stations,
+      });
+    }
+
+    const completePercentage =
+      ((currentDate.getTime() - arrivalDate.getTime()) /
+        (destinationDate.getTime() - arrivalDate.getTime())) *
+      100;
+
+    let lastStation = trainDetail.source;
+    let nextStation = trainDetail.stations[1].name;
+
+    let lastHalt = trainDetail.stations[0].haltTime;
+
+    for (let i = 1; i < trainDetail.stations.length - 1; i++) {
+      const stationTime = getDateTimeFromDate(
+        trainDetail.stations[i].arrivalDate,
+        trainDetail.stations[i].arrivalTime,
+      );
+
+      if (stationTime.getTime() > currentDate.getTime()) {
+        break;
+      }
+
+      lastStation = trainDetail.stations[i].name;
+      nextStation = trainDetail.stations[i + 1].name;
+      lastHalt = trainDetail.stations[i].haltTime;
+    }
+
+    return res.status(200).json({
+      message: 'OK',
+      isStarted: true,
+      isEnded: false,
+      completePercentage: parseInt(completePercentage),
+      lastStation,
+      nextStation,
+      lastHalt,
+      stations: trainDetail.stations,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Something went wrong.....' });

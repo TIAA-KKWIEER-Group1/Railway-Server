@@ -11,4 +11,6 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 router.post('/csvData', upload.single('file'), trainController.csvData);
 router.post('/login', adminController.login);
+router.put('/update-train', adminController.updateTrainTime);
+
 export default router;

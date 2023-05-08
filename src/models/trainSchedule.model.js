@@ -36,6 +36,7 @@ const trainScheduleSchema = mongoose.Schema({
       haltTime: { type: Number },
     },
   ],
+  isDelayed: { type: Boolean, default: false },
 });
 
 export default mongoose.model('TrainSchedule', trainScheduleSchema);
